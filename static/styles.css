@@ -1,4 +1,10 @@
 /* Fondo y animaciones */
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; /* Prevenir scroll accidental en la página completa */
+}
+
 body {
   font-family: 'Arial', sans-serif;
   background: radial-gradient(circle, #e375ff, #fad0c4);
@@ -135,6 +141,7 @@ body::after {
   border-radius: 5px; /* Bordes redondeados */
   font-family: Arial, sans-serif; /* Fuente legible */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  overflow-y: scroll !important; /* Fuerza el scroll incluso en navegadores estrictos */
 }
 
 @keyframes fadeIn {
