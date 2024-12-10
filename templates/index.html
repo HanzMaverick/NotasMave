@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Notes</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+</head>
+<body>
+  <h1>Secure Notes</h1>
+
+  <!-- Formulario para guardar notas -->
+  <h2>Guardar Nota</h2>
+  <form onsubmit="saveNote(); return false;">
+    <input id="noteName" placeholder="Nombre de la nota" required />
+    <input id="password" type="password" placeholder="Contraseña" required />
+    <textarea id="noteContent" placeholder="Escribe tu nota aquí" required></textarea>
+    <button type="submit">Guardar Nota</button>
+  </form>
+  <p id="message"></p>
+
+  <!-- Formulario para buscar notas -->
+  <h2>Buscar Nota</h2>
+  <form onsubmit="fetchNote(); return false;">
+    <input id="searchNoteName" placeholder="Nombre de la nota" required />
+    <input id="searchPassword" type="password" placeholder="Contraseña" required />
+    <button type="submit">Buscar Nota</button>
+  </form>
+  <p id="noteResult"></p>
+
+  <script>
+    async function saveNote() {
+      const name = document.getElementById('noteName').value;
+      const password = document.getElementById('password').value;
+      const content = document.getElementById('noteContent').value;
+
+      const encryptedContent = CryptoJS.AES.encrypt(content, password).toString();
+
+      const response = await fetch('/save-note', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, content: encryptedContent })
+      });
+
+      const result = await response.json();
+      document.getElementById('message').innerText = result.message || result.error;
+    }
+
+    async function fetchNote() {
+      const name = document.getElementById('searchNoteName').value;
+      const password = document.getElementById('searchPassword').value;
+
+      const response = await fetch(`/get-note/${name}`);
+      const result = await response.json();
+
+      if (result.error) {
+        document.getElementById('noteResult').innerText = result.error;
+        return;
+      }
+
+      try {
+        const decryptedContent = CryptoJS.AES.decrypt(result.content, password).toString(CryptoJS.enc.Utf8);
+        if (!decryptedContent) {
+          throw new Error("La contraseña es incorrecta o los datos están corruptos.");
+        }
+        document.getElementById('noteResult').innerText = `Contenido de la nota: ${decryptedContent}`;
+      } catch (e) {
+        document.getElementById('noteResult').innerText = e.message;
+      }
+    }
+  </script>
+</body>
+</html>

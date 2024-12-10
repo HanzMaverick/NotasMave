@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guardar Nota</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+</head>
+<body>
+  <h1>Guardar Nota</h1>
+  <form onsubmit="saveNote(); return false;">
+    <input id="noteName" placeholder="Nombre de la nota" required />
+    <input id="password" type="password" placeholder="Contraseña" required />
+    <textarea id="noteContent" placeholder="Escribe tu nota aquí" required></textarea>
+    <button type="submit">Guardar Nota</button>
+  </form>
+  <p id="message"></p>
+
+  <script>
+    async function saveNote() {
+      const name = document.getElementById('noteName').value;
+      const password = document.getElementById('password').value;
+      const content = document.getElementById('noteContent').value;
+
+      const encryptedContent = CryptoJS.AES.encrypt(content, password).toString();
+
+      const response = await fetch('/save-note', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, content: encryptedContent })
+      });
+
+      const result = await response.json();
+      document.getElementById('message').innerText = result.message || result.error;
+    }
+  </script>
+</body>
+</html>
