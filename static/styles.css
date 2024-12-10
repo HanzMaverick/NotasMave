@@ -127,10 +127,14 @@ body::after {
 
 /* Resultado */
 .result {
-  margin-top: 20px;
-  font-size: 1.2rem;
-  color: #333;
-  animation: fadeIn 1s ease;
+  max-height: 400px; /* Altura máxima del área de texto */
+  overflow-y: auto;  /* Habilitar desplazamiento vertical */
+  background-color: #f8f9fa; /* Fondo suave */
+  padding: 10px;     /* Espaciado interno */
+  border: 1px solid #ddd; /* Borde del contenedor */
+  border-radius: 5px; /* Bordes redondeados */
+  font-family: Arial, sans-serif; /* Fuente legible */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra ligera */
 }
 
 @keyframes fadeIn {
