@@ -16,35 +16,53 @@
       <button type="submit" class="btn">Buscar Nota</button>
     </form>
     <p id="noteResult" class="result"></p>
+    <button id="backButton" class="btn hidden" onclick="goBack()">Regresar</button>
   </div>
 
   <script>
     async function fetchNote() {
-      document.getElementById('searchForm').style.opacity = '0'; // Desvanecer el formulario
+      const form = document.getElementById('searchForm');
+      form.classList.add('hidden'); // Ocultar el formulario
+
       const name = document.getElementById('searchNoteName').value;
       const password = document.getElementById('searchPassword').value;
 
       const response = await fetch(`/get-note/${name}`);
       const result = await response.json();
 
-      setTimeout(() => {
-        if (result.error) {
-          document.getElementById('noteResult').innerText = result.error;
-          document.getElementById('searchForm').style.opacity = '1'; // Mostrar el formulario si hay error
-          return;
-        }
+      if (result.error) {
+        document.getElementById('noteResult').innerText = result.error;
+        form.classList.remove('hidden'); // Mostrar el formulario si hay error
+        return;
+      }
 
-        try {
-          const decryptedContent = CryptoJS.AES.decrypt(result.content, password).toString(CryptoJS.enc.Utf8);
-          if (!decryptedContent) {
-            throw new Error("La contraseña es incorrecta o los datos están corruptos.");
-          }
-          document.getElementById('noteResult').innerText = `Contenido de la nota: ${decryptedContent}`;
-        } catch (e) {
-          document.getElementById('noteResult').innerText = e.message;
-          document.getElementById('searchForm').style.opacity = '1'; // Mostrar el formulario si hay error
+      try {
+        const decryptedContent = CryptoJS.AES.decrypt(result.content, password).toString(CryptoJS.enc.Utf8);
+        if (!decryptedContent) {
+          throw new Error("La contraseña es incorrecta o los datos están corruptos.");
         }
-      }, 500); // Añadir un pequeño retraso para la animación
+        document.getElementById('noteResult').innerText = `Contenido de la nota: ${decryptedContent}`;
+      } catch (e) {
+        document.getElementById('noteResult').innerText = e.message;
+        form.classList.remove('hidden'); // Mostrar el formulario si hay error
+      }
+
+      document.getElementById('backButton').classList.remove('hidden'); // Mostrar el botón de regresar
+    }
+
+    function goBack() {
+      const form = document.getElementById('searchForm');
+      const result = document.getElementById('noteResult');
+      const backButton = document.getElementById('backButton');
+
+      // Limpia el contenido del resultado
+      result.textContent = '';
+
+      // Vuelve a mostrar el formulario
+      form.classList.remove('hidden');
+
+      // Oculta el botón de regresar
+      backButton.classList.add('hidden');
     }
   </script>
 </body>
