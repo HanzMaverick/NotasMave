@@ -56,6 +56,12 @@ body::after {
   animation: fadeSlideIn 1s forwards;
 }
 
+textarea#noteContent {
+  width: 100%; /* O un tamaño fijo como 600px */
+  height: 200px; /* O ajusta a tu preferencia */
+  resize: both; /* Permite que el usuario redimensione el área si quieres */
+}
+
 @keyframes fadeSlideIn {
   to { opacity: 1; transform: translateY(0); }
 }
@@ -134,7 +140,7 @@ body::after {
 /* Resultado */
 .result {
   max-height: 400px; /* Altura máxima del área de texto */
-  overflow-y: auto;  /* Habilitar desplazamiento vertical */
+  overflow-y: scroll; /* Habilitar desplazamiento vertical */
   background-color: #f8f9fa; /* Fondo suave */
   padding: 10px;     /* Espaciado interno */
   border: 1px solid #ddd; /* Borde del contenedor */
