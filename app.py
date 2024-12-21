@@ -27,7 +27,7 @@ def save_note():
     if Note.query.filter_by(name=name).first():
         return jsonify({"error": "La nota ya existe y no se puede editar."}), 403
 
-    new_note = Note(name=name, content=content, editable=False)
+    new_note = Note(name=name, content=content, editable=True)
     db.session.add(new_note)
     db.session.commit()
     return jsonify({"message": "Nota guardada exitosamente."}), 201
@@ -41,6 +41,25 @@ def get_note(note_name):
 
     return jsonify({"name": note.name, "content": note.content})
 
+# Endpoint para editar notas
+@app.route('/edit-note', methods=['POST'])
+def edit_note():
+    data = request.json
+    name = data['name']
+    content = data['content']
+    password = data.get('password')
+
+    note = Note.query.filter_by(name=name).first()
+    if not note:
+        return jsonify({"error": "Nota no encontrada."}), 404
+
+    if not note.editable:
+        return jsonify({"error": "La nota no se puede editar."}), 403
+
+    note.content = content
+    db.session.commit()
+    return jsonify({"message": "Nota editada exitosamente."}), 200
+
 # Página para guardar notas (solo para el administrador)
 @app.route('/admin/save', methods=['GET'])
 def admin_save():
@@ -48,9 +67,8 @@ def admin_save():
 
 # Página para buscar notas (para los lectores)
 @app.route('/search', methods=['GET'])
-def search_note():
+def search_page():
     return render_template('search.html')
-
 
 # Página principal
 @app.route('/')

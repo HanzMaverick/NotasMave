@@ -3,19 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Guardar Nota</title>
+  <title>Administrador de Notas</title>
   <link rel="stylesheet" href="/static/styles.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 </head>
 <body>
-  <h1>Guardar Nota</h1>
-  <form onsubmit="saveNote(); return false;">
-    <input id="noteName" placeholder="Nombre de la nota" required />
-    <input id="password" type="password" placeholder="Contraseña" required />
-    <textarea id="noteContent" placeholder="Escribe tu nota aquí" required></textarea>
-    <button type="submit">Guardar Nota</button>
-  </form>
-  <p id="message"></p>
+  <h1>Administrador de Notas</h1>
+
+  <!-- Sección para guardar una nota -->
+  <section>
+    <h2>Guardar Nota</h2>
+    <form onsubmit="saveNote(); return false;">
+      <input id="noteName" placeholder="Nombre de la nota" required />
+      <input id="password" type="password" placeholder="Contraseña" required />
+      <textarea id="noteContent" placeholder="Escribe tu nota aquí" required></textarea>
+      <button type="submit">Guardar Nota</button>
+    </form>
+    <p id="message"></p>
+  </section>
+
+  <!-- Sección para buscar una nota -->
+  <section>
+    <h2>Buscar Nota</h2>
+    <form onsubmit="searchNote(); return false;">
+      <input id="searchName" placeholder="Nombre de la nota" required />
+      <input id="searchPassword" type="password" placeholder="Contraseña" required />
+      <button type="submit">Buscar Nota</button>
+    </form>
+    <p id="searchResult"></p>
+  </section>
+
+  <!-- Sección para editar una nota -->
+  <section>
+    <h2>Editar Nota</h2>
+    <form onsubmit="editNote(); return false;">
+      <input id="editName" placeholder="Nombre de la nota" required />
+      <input id="editPassword" type="password" placeholder="Contraseña" required />
+      <textarea id="editContent" placeholder="Nuevo contenido de la nota" required></textarea>
+      <button type="submit">Editar Nota</button>
+    </form>
+    <p id="editMessage"></p>
+  </section>
 
   <script>
     async function saveNote() {
@@ -33,6 +61,42 @@
 
       const result = await response.json();
       document.getElementById('message').innerText = result.message || result.error;
+    }
+
+    async function searchNote() {
+      const name = document.getElementById('searchName').value;
+      const password = document.getElementById('searchPassword').value;
+
+      const response = await fetch(`/search-note?name=${encodeURIComponent(name)}`);
+      const result = await response.json();
+
+      if (result.error) {
+        document.getElementById('searchResult').innerText = result.error;
+      } else {
+        try {
+          const decryptedContent = CryptoJS.AES.decrypt(result.content, password).toString(CryptoJS.enc.Utf8);
+          document.getElementById('searchResult').innerText = decryptedContent || 'La contraseña es incorrecta.';
+        } catch {
+          document.getElementById('searchResult').innerText = 'La contraseña es incorrecta.';
+        }
+      }
+    }
+
+    async function editNote() {
+      const name = document.getElementById('editName').value;
+      const password = document.getElementById('editPassword').value;
+      const newContent = document.getElementById('editContent').value;
+
+      const encryptedContent = CryptoJS.AES.encrypt(newContent, password).toString();
+
+      const response = await fetch('/edit-note', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, content: encryptedContent, password })
+      });
+
+      const result = await response.json();
+      document.getElementById('editMessage').innerText = result.message || result.error;
     }
   </script>
 </body>

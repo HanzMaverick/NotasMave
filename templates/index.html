@@ -29,6 +29,7 @@
   </form>
   <p id="noteResult"></p>
 
+
   <script>
     async function saveNote() {
       const name = document.getElementById('noteName').value;
@@ -46,6 +47,8 @@
       const result = await response.json();
       document.getElementById('message').innerText = result.message || result.error;
     }
+
+
 
     async function fetchNote() {
       const name = document.getElementById('searchNoteName').value;
