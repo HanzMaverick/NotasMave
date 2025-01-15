@@ -9,7 +9,19 @@
 </head>
 <body>
   <div class="container">
-    <h1 class="title">🐒 Notas Mave 🐒</h1>
+    <h1 class="title">🐒 NotMave 🐒</h1>
+
+    <!-- Carrusel de textos -->
+    <div id="carousel" class="carousel">
+      <div class="carousel-item active">💊El bloque génesis de Bitcoin fue creado el 3 de enero de 2009 dicho bloque añadió los 50 primeros bitcoins de la red. Estos bitcoins no han sido movidos nunca. Pero tampoco se podrán mover.</div>
+      <div class="carousel-item">💊Los halvings de bitcoin tendrán lugar cada 210 000 bloques hasta el año 2140 aproximadamente, cuando se habrá minado el total de los 20,999,999,9769 de Bitcoins.</div>
+      <div class="carousel-item">💊Es importante aclarar que existe bitcoin (con b minúscula) que hace referencia a la criptomoneda y Bitcoin (con B mayúscula) que se refiere al protocolo informático y a la red donde existe dicha criptomoneda. Sí, ambas llevan el mismo nombre.</div>
+      <div class="carousel-item">💊Las transacciones de Bitcoin y la creación de nuevos Bitcoin se validan mediante un proceso llamado minería. La minería se basa en aplicaciones de software que se ejecutan en hardware específicamente diseñado para resolver complejos rompecabezas matemáticos.</div>
+      <div class="carousel-item">💊Tus bitcoin existen únicamente en la cadena de bloques y de ahí nunca saldrán. Tu billetera contiene la clave privada que te da acceso a esos bitcoin.</div>
+      <div class="carousel-item">💊Para garantizar la integridad de las transacciones en la blockchain, Bitcoin utiliza la tecnología de Los Árboles Merkle, estos dividen los datos en bloques más pequeños, conocidos como "hashes". Estos hashes se calculan utilizando una función criptográfica de resumen, como SHA-256 (Secure Hash Algorithm 256 bits).</div>
+      <div class="carousel-item">UTXO, o “Unspent Transaction Output”, es un concepto fundamental en la tecnología de Bitcoin. Es una forma de representar las unidades de moneda no gastadas en una transacción previa. Cada transacción en la red de Bitcoin crea uno o más nuevos UTXOs y utiliza uno o más UTXOs existentes como entrada.</div>
+    </div>
+
     <form id="searchForm" onsubmit="fetchNote(); return false;" class="form">
       <input id="searchNoteName" placeholder="Nombre de la nota" required class="input" />
       <input id="searchPassword" type="password" placeholder="Contraseña" required class="input" />
@@ -20,6 +32,21 @@
   </div>
 
   <script>
+      // Función para manejar el carrusel
+      function startCarousel() {
+      const items = document.querySelectorAll('.carousel-item');
+      let currentIndex = 0;
+
+      setInterval(() => {
+        items[currentIndex].classList.remove('active');
+        currentIndex = (currentIndex + 1) % items.length;
+        items[currentIndex].classList.add('active');
+      }, 8000); // Cambiar cada 8 segundos
+    }
+
+    // Llamar al carrusel al cargar la página
+    window.onload = startCarousel;
+
     async function fetchNote() {
       const form = document.getElementById('searchForm');
       form.classList.add('hidden'); // Ocultar el formulario

@@ -2,14 +2,14 @@
 html, body {
   height: 100%;
   margin: 0;
-  overflow: hidden; /* Prevenir scroll accidental en la página completa */
+  overflow: hidden;
 }
 
 body {
   font-family: 'Arial', sans-serif;
   background: radial-gradient(circle, #e375ff, #fad0c4);
   position: relative;
-  overflow: hidden;
+  overflow-y: scroll;
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -183,4 +183,37 @@ textarea#noteContent {
   .container { max-width: 700px; padding: 50px; }
   .title { font-size: 3rem; }
   .form { gap: 20px; }
+}
+
+.carousel {
+  margin: 20px 0;
+  text-align: center;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #000000;
+  background: linear-gradient(90deg, #ff5d35, #ffa057);
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+
+}
+
+.carousel-item {
+  display: none;
+  animation: fadeIn 1s;
+}
+
+.carousel-item.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
