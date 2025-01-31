@@ -61,19 +61,18 @@ def edit_note():
     return jsonify({"message": "Nota editada exitosamente."}), 200
 
 # Página para guardar notas (solo para el administrador)
-@app.route('/admin/save', methods=['GET'])
-def admin_save():
-    return render_template('admin.html')
+#@app.route('/admin/save', methods=['GET'])
+#def admin_save():
+  #  return render_template('admin.html')
 
 # Página para buscar notas (para los lectores)
-@app.route('/search', methods=['GET'])
-def search_page():
-    return render_template('search.html')
-
+#*@app.route('/search', methods=['GET'])
+#def search_page():
+   # return render_template('search.html')
 # Página principal
 @app.route('/')
 def index():
-    return render_template('search.html')
+    return render_template('loading.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
