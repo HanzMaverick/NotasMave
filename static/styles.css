@@ -93,7 +93,7 @@ textarea#noteContent {
 .input {
   padding: 10px;
   border: 2px solid transparent;
-  background: linear-gradient(to right, #ffffff, #494949);
+  background: linear-gradient(to right, #ffffff, #272727);
   border-radius: 10px;
   outline: none;
   transition: box-shadow 0.4s ease-in-out, border-color 0.4s ease-in-out;
