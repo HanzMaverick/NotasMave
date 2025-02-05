@@ -132,8 +132,8 @@ textarea#noteContent {
 /* Estilo para el botón de regresar */
 #backButton {
   margin-top: 20px;
-  background: linear-gradient(90deg, #a78485, #ffcdfb);
-  color: #333;
+  background: linear-gradient(90deg, #a5a5a5, #000000);
+  color: #ffffff;
   border: none;
   padding: 10px 20px;
   border-radius: 10px;
