@@ -65,7 +65,7 @@
         if (!decryptedContent) {
           throw new Error("La contraseña es incorrecta o los datos están corruptos.");
         }
-        document.getElementById('noteResult').innerText = `Contenido de la nota: ${decryptedContent}`;
+        document.getElementById('noteResult').innerText = `${decryptedContent}`;
       } catch (e) {
         document.getElementById('noteResult').innerText = e.message;
         form.classList.remove('hidden'); // Mostrar el formulario si hay error
