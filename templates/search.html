@@ -29,7 +29,158 @@
   </div>
 
   <script>
-      src="/static/search.js"
+      // Función para manejar el carrusel
+      function startCarousel() {
+      const items = document.querySelectorAll('.carousel-item');
+      let currentIndex = 0;
+
+      setInterval(() => {
+        items[currentIndex].classList.remove('active');
+        currentIndex = (currentIndex + 1) % items.length;
+        items[currentIndex].classList.add('active');
+      }, 10000); // Cambiar cada 8 segundos
+    }
+
+    // Llamar al carrusel al cargar la página
+    window.onload = startCarousel;
+
+    async function fetchNote() {
+      const form = document.getElementById('searchForm');
+      form.classList.add('hidden'); // Ocultar el formulario
+
+      const name = document.getElementById('searchNoteName').value;
+      const password = document.getElementById('searchPassword').value;
+
+      const response = await fetch(`/get-note/${name}`);
+      const result = await response.json();
+
+      if (result.error) {
+        document.getElementById('noteResult').innerText = result.error;
+        form.classList.remove('hidden'); // Mostrar el formulario si hay error
+        return;
+      }
+
+      try {
+        const decryptedContent = CryptoJS.AES.decrypt(result.content, password).toString(CryptoJS.enc.Utf8);
+        if (!decryptedContent) {
+          throw new Error("La contraseña es incorrecta o los datos están corruptos.");
+    }
+    const noteResult = document.getElementById('noteResult');
+    noteResult.innerText = `${decryptedContent}`;
+    noteResult.classList.add('unselectable', 'note-content'); // Añadir clases para evitar selección
+    noteResult.oncopy = (e) => { e.preventDefault(); return false; }; // Prevenir copia
+    noteResult.oncut = (e) => { e.preventDefault(); return false; }; // Prevenir cortar
+    noteResult.onpaste = (e) => { e.preventDefault(); return false; }; // Prevenir pegar
+    noteResult.oncontextmenu = (e) => { e.preventDefault(); return false; }; // Prevenir menú contextual
+  } catch (e) {
+    document.getElementById('noteResult').innerText = e.message;
+    form.classList.remove('hidden'); // Mostrar el formulario si hay error
+  }
+
+  document.getElementById('backButton').classList.remove('hidden'); // Mostrar el botón de regresar
+}
+
+  // Función para obtener el precio de Bitcoin
+  async function getBitcoinPrice() {
+      try {
+        const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
+        const data = await response.json();
+        return data.bitcoin.usd;
+      } catch (error) {
+        console.error("Error al obtener el precio de Bitcoin:", error);
+        return "N/A";
+      }
+    }
+
+    // Función para obtener el volumen de transacciones de Bitcoin
+    async function getBitcoinVolume() {
+      try {
+        const response = await fetch('https://api.coingecko.com/api/v3/coins/bitcoin');
+        const data = await response.json();
+        return data.market_data.total_volume.usd.toLocaleString();
+      } catch (error) {
+        console.error("Error al obtener el volumen de transacciones:", error);
+        return "N/A";
+      }
+    }
+
+    // Función para obtener el tamaño de la mempool
+    async function getMempoolSize() {
+      try {
+        const response = await fetch('https://mempool.space/api/mempool');
+        const data = await response.json();
+        const mempoolSizeBytes = data.size; // Tamaño en bytes
+        const mempoolSizeMB = (mempoolSizeBytes / (1024 * 1024)).toFixed(2); // Convertir a MB
+        return `${mempoolSizeMB} MB`;
+      } catch (error) {
+        console.error("Error al obtener el tamaño de la mempool:", error);
+        return "N/A";
+      }
+    }
+
+    // Función para obtener el hashrate de la red
+    async function getNetworkHashrate() {
+      try {
+        const response = await fetch('https://mempool.space/api/v1/mining/hashrate/3d');
+        const data = await response.json();
+        const hashrateEH = (data.currentHashrate / 1e18).toFixed(2); // Convertir a EH/s
+        return `${hashrateEH} EH/s`;
+      } catch (error) {
+        console.error("Error al obtener el hashrate de la red:", error);
+        return "N/A";
+      }
+    }
+
+    async function updateBitcoinData() {
+      const price = await getBitcoinPrice();
+      const volume = await getBitcoinVolume();
+      const mempoolSize = await getMempoolSize();
+      const hashrate = await getNetworkHashrate();
+
+      const btcPriceSlide = document.getElementById('btcPriceSlide');
+      const btcVolumeSlide = document.getElementById('btcVolumeSlide');
+      const btcMempoolSlide = document.getElementById('btcMempoolSlide');
+      const btcHashrateSlide = document.getElementById('btcHashrateSlide');
+
+      if (btcPriceSlide) {
+        btcPriceSlide.innerHTML = `💲 Precio de Bitcoin: $${price} USD`;
+      }
+
+      if (btcVolumeSlide) {
+        btcVolumeSlide.innerHTML = `📊 Volumen de transacciones (24h): $${volume} USD`;
+      }
+
+      if (btcMempoolSlide) {
+        btcMempoolSlide.innerHTML = `📦 Tamaño de la mempool: ${mempoolSize}`;
+      }
+
+      if (btcHashrateSlide) {
+        btcHashrateSlide.innerHTML = `⚡ Hashrate de la red: ${hashrate}`;
+      }
+    }
+
+    // Llamar al carrusel y actualizar los datos de Bitcoin al cargar la página
+    window.onload = () => {
+      startCarousel();
+      updateBitcoinData();
+      setInterval(updateBitcoinData, 60000); // Actualizar cada minuto
+    };
+
+
+    function goBack() {
+      const form = document.getElementById('searchForm');
+      const result = document.getElementById('noteResult');
+      const backButton = document.getElementById('backButton');
+
+      // Limpia el contenido del resultado
+      result.textContent = '';
+
+      // Vuelve a mostrar el formulario
+      form.classList.remove('hidden');
+
+      // Oculta el botón de regresar
+      backButton.classList.add('hidden');
+    }
   </script>
 </body>
 </html>
