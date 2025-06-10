@@ -14,9 +14,22 @@ html, body {
   z-index: 1;
 }
 
+/* Reemplaza las reglas de fondo actuales en styles.css */
 body {
   font-family: 'Arial', sans-serif;
-  background: radial-gradient(circle, #000000, #242424);
+  background-color: #793000;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.3) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+  background-size:
+    100% 100%, /* Tamaño del degradado principal */
+    50px 50px, /* Tamaño de la cuadrícula grande */
+    50px 50px,
+    10px 10px, /* Tamaño de la cuadrícula pequeña */
+    10px 10px;
+  background-attachment: fixed;
   position: relative;
   overflow-y: scroll;
   height: 100vh;
@@ -24,6 +37,17 @@ body {
   justify-content: center;
   align-items: center;
   margin: 0;
+  animation: gridMove 50s linear infinite, gradientPulse 100s ease infinite alternate;
+}
+
+@keyframes gradientPulse {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 100% 100%; }
+}
+
+@keyframes gridMove {
+  0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+  100% { background-position: 50px 50px, 50px 50px, 10px 10px, 10px 10px; }
 }
 
 body::before, body::after {
@@ -56,14 +80,16 @@ body::after {
 /* Contenedor principal */
 .container {
   text-align: center;
-  background: rgba(255, 255, 255, 0.637);
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid #ff7700;
   border-radius: 15px;
   padding: 20px 30px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 25px rgba(255, 119, 0, 0.6);
   width: 90%;
   max-width: 400px;
   animation: fadeSlideIn 1s forwards;
   z-index: 2;
+  color: #000000;
 }
 
 textarea#noteContent {
@@ -77,10 +103,12 @@ textarea#noteContent {
 }
 
 /* Título */
+/* Ajusta el título para que contraste */
 .title {
   font-size: 2rem;
-  color: #000000;
+  color: #ffffff;
   margin-bottom: 15px;
+  text-shadow: 0 0 10px rgb(255, 166, 0);
 }
 
 /* Formulario */
@@ -177,7 +205,7 @@ textarea#noteContent {
     cursor: default; /* Cambia el cursor por defecto */
     /* Opcional: puedes agregar más estilos para que parezca que no es seleccionable */
   }
-  
+
 /* Indicador de carga */
 .loading {
   display: none;
@@ -214,13 +242,12 @@ textarea#noteContent {
   font-size: 1.2em;
   font-weight: bold;
   color: #000000;
-  background: linear-gradient(90deg, #ff5d35, #ffa057);
+  background: linear-gradient(90deg, #ff8c00, #ff4500);
   padding: 15px;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 15px rgba(255, 69, 0, 0.6);
   position: relative;
   overflow: hidden;
-
 }
 
 .carousel-item {
