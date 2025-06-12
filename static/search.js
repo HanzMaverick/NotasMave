@@ -34,13 +34,83 @@
         if (!decryptedContent) {
           throw new Error("La contraseña es incorrecta o los datos están corruptos.");
     }
-    const noteResult = document.getElementById('noteResult');
-    noteResult.innerText = `${decryptedContent}`;
-    noteResult.classList.add('unselectable', 'note-content'); // Añadir clases para evitar selección
-    noteResult.oncopy = (e) => { e.preventDefault(); return false; }; // Prevenir copia
-    noteResult.oncut = (e) => { e.preventDefault(); return false; }; // Prevenir cortar
-    noteResult.onpaste = (e) => { e.preventDefault(); return false; }; // Prevenir pegar
-    noteResult.oncontextmenu = (e) => { e.preventDefault(); return false; }; // Prevenir menú contextual
+    // Limpiar resultado anterior
+const noteResult = document.getElementById('noteResult');
+noteResult.innerHTML = ''; // Limpiar el contenido
+
+// Crear canvas
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+
+
+// Estilos del texto
+const fontSize = 18;
+const lineHeight = fontSize * 1.6;
+const maxWidth = 600;
+const padding = 20;
+ctx.font = `${fontSize}px Arial`;
+
+// Dividir texto en líneas
+const lines = decryptedContent.split('\n');
+let currentLine = '';
+decryptedContent.split(' ').forEach(word => {
+  const testLine = currentLine + word + ' ';
+  const testWidth = ctx.measureText(testLine).width;
+  if (testWidth > maxWidth - padding * 2) {
+    lines.push(currentLine);
+    currentLine = word + ' ';
+  } else {
+    currentLine = testLine;
+  }
+});
+lines.push(currentLine);
+
+// Ajustar tamaño del canvas
+canvas.width = maxWidth;
+canvas.height = padding * 2 + lines.length * lineHeight;
+
+// Fondo blanco
+ctx.fillStyle = '#fff';
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+// Dibujar texto principal
+ctx.fillStyle = '#000';
+ctx.font = `${fontSize}px Arial`;
+ctx.textBaseline = 'top';
+
+lines.forEach((line, index) => {
+  ctx.fillText(line, padding, padding + index * lineHeight);
+});
+
+ctx.save();
+ctx.globalAlpha = 0.65;
+ctx.translate(canvas.width / 6, canvas.height / 6);
+ctx.rotate(-Math.PI / 4);
+ctx.font = '20px sans-serif';
+ctx.fillStyle = '#000';
+ctx.textAlign = 'center';
+
+const watermarkText = `NotMave - ${new Date().toLocaleString()}`;
+const stepX = 250;
+const stepY = 80;
+
+// Dibujar el texto en patrón repetido
+for (let y = -canvas.height; y < canvas.height * 4; y += stepY) {
+  for (let x = -canvas.width; x < canvas.width * 4; x += stepX) {
+    ctx.fillText(watermarkText, x, y);
+  }
+}
+
+ctx.restore();
+
+noteResult.appendChild(canvas);
+noteResult.classList.add('unselectable', 'note-content');
+
+// Bloquear interacciones
+noteResult.oncopy = noteResult.oncut = noteResult.onpaste = noteResult.oncontextmenu = (e) => {
+  e.preventDefault();
+  return false;
+}
   } catch (e) {
     document.getElementById('noteResult').innerText = e.message;
     form.classList.remove('hidden'); // Mostrar el formulario si hay error
@@ -151,3 +221,34 @@
       // Oculta el botón de regresar
       backButton.classList.add('hidden');
     }
+
+    // Protección visual contra screenshots o pérdida de foco
+
+// Capa de oscurecimiento
+const overlay = document.createElement('div');
+overlay.style.position = 'fixed';
+overlay.style.top = '0';
+overlay.style.left = '0';
+overlay.style.width = '100vw';
+overlay.style.height = '100vh';
+overlay.style.backgroundColor = 'black';
+overlay.style.zIndex = '9999';
+overlay.style.display = 'none';
+document.body.appendChild(overlay);
+
+// Detectar pérdida de foco (cambio de pestaña o app)
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    overlay.style.display = 'block';
+  } else {
+    overlay.style.display = 'none';
+  }
+});
+
+// También cubrir si cambia de ventana
+window.addEventListener('blur', () => {
+  overlay.style.display = 'block';
+});
+window.addEventListener('focus', () => {
+  overlay.style.display = 'none';
+});

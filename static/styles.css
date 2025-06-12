@@ -267,3 +267,22 @@ textarea#noteContent {
     opacity: 1;
   }
 }
+
+.unselectable {
+  user-select: none;
+}
+
+canvas {
+  max-width: 100%;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+.scroll-container {
+  max-height: 80vh; /* alto máximo visible */
+  max-width: 100%;
+  overflow: auto;   /* permite scroll vertical y horizontal */
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
