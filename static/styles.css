@@ -274,7 +274,9 @@ textarea#noteContent {
 
 canvas {
   max-width: 100%;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  height: auto;
+  display: block;
+  margin: 0 auto;
 }
 
 .scroll-container {
