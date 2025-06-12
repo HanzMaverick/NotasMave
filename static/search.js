@@ -83,8 +83,8 @@ lines.forEach((line, index) => {
 });
 
 ctx.save();
-ctx.globalAlpha = 0.60;
-ctx.translate(canvas.width / 2, canvas.height / 2);
+ctx.globalAlpha = 0.50;
+ctx.translate(canvas.width / 4, canvas.height / 4);
 ctx.rotate(-Math.PI / 4);
 ctx.font = `${fontSize + 6}px sans-serif`;
 ctx.fillStyle = '#000';
@@ -95,8 +95,8 @@ const stepX = maxWidth / 2.5;
 const stepY = lineHeight * 2;
 
 // Dibujar el texto en patrón repetido
-for (let y = -canvas.height; y < canvas.height * 2; y += stepY) {
-  for (let x = -canvas.width; x < canvas.width * 2; x += stepX) {
+for (let y = -canvas.height; y < canvas.height * 6; y += stepY) {
+  for (let x = -canvas.width; x < canvas.width * 6; x += stepX) {
     ctx.fillText(watermarkText, x, y);
   }
 }
