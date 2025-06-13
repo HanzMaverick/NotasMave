@@ -51,19 +51,29 @@ ctx.font = `${fontSize}px Courier New`;
 const padding = 20;
 
 // Dividir texto en líneas
-const lines = decryptedContent.split('\n');
-let currentLine = '';
-decryptedContent.split(' ').forEach(word => {
-  const testLine = currentLine + word + ' ';
-  const testWidth = ctx.measureText(testLine).width;
-  if (testWidth > maxWidth - padding * 2) {
-    lines.push(currentLine);
-    currentLine = word + ' ';
-  } else {
-    currentLine = testLine;
+const rawLines = decryptedContent.split('\n');
+const lines = [];
+
+rawLines.forEach((line) => {
+  let currentLine = '';
+  const words = line.split(' ');
+
+  words.forEach(word => {
+    const testLine = currentLine + word + ' ';
+    const testWidth = ctx.measureText(testLine).width;
+    if (testWidth > maxWidth - padding * 2) {
+      lines.push(currentLine.trim());
+      currentLine = word + ' ';
+    } else {
+      currentLine = testLine;
+    }
+  });
+
+  if (currentLine.trim()) {
+    lines.push(currentLine.trim());
   }
 });
-lines.push(currentLine);
+
 
 // Ajustar tamaño del canvas
 canvas.width = maxWidth;
@@ -83,7 +93,7 @@ lines.forEach((line, index) => {
 });
 
 ctx.save();
-ctx.globalAlpha = 0.40;
+ctx.globalAlpha = 0.6;
 ctx.translate(canvas.width / 6, canvas.height / 6);
 ctx.rotate(-Math.PI / 4);
 ctx.font = `${fontSize + 6}px sans-serif`;
@@ -91,8 +101,8 @@ ctx.fillStyle = '#000';
 ctx.textAlign = 'center';
 
 const watermarkText = `NotMave - ${new Date().toLocaleString()}`;
-const stepX = maxWidth / 2.5;
-const stepY = lineHeight * 2;
+const stepX = maxWidth / 1.5;
+const stepY = lineHeight * 1;
 
 // Dibujar el texto en patrón repetido
 for (let y = -canvas.height; y < canvas.height * 4; y += stepY) {
