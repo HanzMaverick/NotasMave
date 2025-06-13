@@ -101,7 +101,7 @@ ctx.fillStyle = '#000';
 ctx.textAlign = 'center';
 
 const watermarkText = `NotMave - ${new Date().toLocaleString()}`;
-const stepX = maxWidth / 1.5;
+const stepX = maxWidth / 1.35;
 const stepY = lineHeight * 1;
 
 // Dibujar el texto en patrón repetido
