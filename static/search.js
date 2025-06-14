@@ -95,13 +95,13 @@ lines.forEach((line, index) => {
 ctx.save();
 ctx.globalAlpha = 0.55;
 ctx.translate(canvas.width / 6, canvas.height / 6);
-ctx.rotate(-Math.PI / 4);
+ctx.rotate(-Math.PI / 6);
 ctx.font = `${fontSize + 5}px sans-serif`;
 ctx.fillStyle = '#000';
 ctx.textAlign = 'center';
 
 const watermarkText = `NotMave - ${new Date().toLocaleString()}`;
-const stepX = maxWidth / 1.3;
+const stepX = maxWidth / 1.1;
 const stepY = lineHeight * 1;
 
 // Dibujar el texto en patrón repetido
