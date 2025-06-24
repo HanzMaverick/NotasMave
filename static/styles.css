@@ -128,8 +128,8 @@ textarea#noteContent {
 }
 
 .input:focus {
-  border-color: #ff4d4d;
-  box-shadow: 0 0 15px rgba(255, 121, 186, 0.6);
+  border-color: #fd821d;
+  box-shadow: 0 0 15px rgba(255, 175, 121, 0.6);
 }
 
 /* Botón */
