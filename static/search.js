@@ -93,7 +93,7 @@ lines.forEach((line, index) => {
 });
 
 ctx.save();
-ctx.globalAlpha = 0.55;
+ctx.globalAlpha = 0.57;
 ctx.translate(canvas.width / 6, canvas.height / 6);
 ctx.rotate(-Math.PI / 6);
 ctx.font = `${fontSize + 5}px sans-serif`;
