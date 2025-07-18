@@ -46,7 +46,7 @@ const ctx = canvas.getContext('2d');
 // Estilos del texto
 const maxWidth = Math.min(window.innerWidth * 0.9, 600);
 const fontSize = Math.max(14, Math.floor(maxWidth / 30));
-const lineHeight = fontSize * 1.6;
+const lineHeight = fontSize * 1.5;
 ctx.font = `${fontSize}px Courier New`;
 const padding = 20;
 
@@ -93,7 +93,7 @@ lines.forEach((line, index) => {
 });
 
 ctx.save();
-ctx.globalAlpha = 0.57;
+ctx.globalAlpha = 0.6;
 ctx.translate(canvas.width / 6, canvas.height / 6);
 ctx.rotate(-Math.PI / 6);
 ctx.font = `${fontSize + 5}px sans-serif`;
